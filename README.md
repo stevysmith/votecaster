@@ -1,13 +1,12 @@
 # Votecaster Frame
 
 This Votecaster Frame allows users to vote on a Votecaster from a Frame.
-It leverages the `frame.js` framework for the frame part, a `Safe Module` for proposals and voting management, and `The Graph` for indexing voting data from the blockchain.
+It leverages the `frame.js` framework for the frame part, a governor for proposals and voting management, and `The Graph` for indexing voting data from the blockchain.
 
 ## Features
 
-- **On-Chain Voting**: Enable direct voting on on-chain proposals. A Proposal is a transfer of a certain token amount to an address receiver at the moment.
+- **On-Chain Voting**: Enable direct voting on on-chain proposals.
 - **Real-Time Indexing**: Use The Graph to index voting data from the chain, ensuring up-to-date information using our subgraph
-- **Safe Module**: Utilize a Safe Module for secure and efficient vote handling.
   
 ## References
 - our Frame: http://localhost:3000/proposals/6
