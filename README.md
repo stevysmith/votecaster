@@ -1,6 +1,6 @@
 # Votecaster Frame
 
-This Votecaster Frame allows users to vote on a Votecaster from a Frame.
+This Votecaster Frame allows users to vote on a proposal from a Frame.
 It leverages the `frame.js` framework for the frame part, a governor for proposals and voting management, and `The Graph` for indexing voting data from the blockchain.
 
 ## Features
