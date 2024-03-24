@@ -108,6 +108,8 @@ export const getProposal = async (proposalId: string): Promise<Proposal | null> 
   if (!data.proposals || data.proposals.length === 0) {
     return null;
   }
+  
+  console.log("The Graph");
 
   return data.proposals[0];
 };

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { PROPOSAL_ID } from '../../../../lib/constants';
-import { FrameActionPayload, validateFrameMessage, getAddressForFid } from 'frames.js';
-import { sendVoteTransaction } from '../../../../lib/ethers';
+import { FrameActionPayload, validateFrameMessage, getAddressForFid, getFrameMessage } from 'frames.js';
+import { sendVoteTransaction, castVoteOnProposal  } from '../../../../lib/ethers';
 import {
   alreadyVotedResponse,
   invalidFidResponse,
@@ -19,16 +19,16 @@ async function getResponse(
   const body: FrameActionPayload = await req.json();
   const id = params.id;
 
-  console.log('Received message', body);
+  // const { isValid, message } = await validateFrameMessage(body);
 
-  const { isValid, message } = await validateFrameMessage(body);
+  const message = await getFrameMessage(body);
+
+  // if (!isValid) {
+  //   console.error('Error: invalid message');
+  //   return new NextResponse(tryAgainResponse(id));
+  // }
 
   console.log(message)
-
-  if (!isValid) {
-    console.error('Error: invalid message');
-    return new NextResponse(tryAgainResponse(id));
-  }
 
   const proposal = await getProposal(id);
 
@@ -44,30 +44,26 @@ async function getResponse(
   //   console.error(`Proposal threshold reached`);
   //   return new NextResponse(thresholdReachedResponse(id));
   // }
-
-  console.log("TEST")
-  console.log(message)
-  const fid = message?.data.fid!;
   
-  console.log(fid)
-  console.log("WE HERE")
+  const fid = message?.castId?.fid as number;
 
   // check user address is part of delegates
-  var address = await getAddressForFid({ fid: fid, hubClient: null, options: { fallbackToCustodyAddress: true }});
+  var address = message.connectedAddress
+  // var address = await getAddressForFid({ fid: fid, options: { fallbackToCustodyAddress: true }});
   const delegates = await getDelegates();
 
-  if (delegates !== null) {
-    if (!delegates.find((delegate) => delegate.id === address)) {
-      console.error('Error: invalid fid', { fid: fid, minFid: proposal?.proposalThreshold });
-      return new NextResponse(
-        invalidFidResponse(fid.toString(), parseInt(proposal?.proposalThreshold!), id),
-      );
-    }
-  }
+  // if (delegates !== null) {
+  //   if (!delegates.find((delegate) => delegate.id === address)) {
+  //     console.error('Error: Noun not found', { fid: fid, minFid: proposal?.proposalThreshold });
+  //     return new NextResponse(
+  //       invalidFidResponse(fid.toString(), parseInt(proposal?.proposalThreshold!), id),
+  //     );
+  //   }
+  // }
 
   try {
     console.log('Sending vote transaction');
-    await sendVoteTransaction(body.trustedData.messageBytes, id);
+    await castVoteOnProposal(message.buttonIndex - 1, parseInt(id));
     console.log('Vote transaction sent');
 
     return new NextResponse(resultsResponse(id));

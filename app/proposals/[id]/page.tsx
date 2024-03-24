@@ -1,4 +1,4 @@
-import { Frame, getFrameFlattened } from 'frames.js';
+import { Frame, getFrameFlattened, FrameButton, FrameVersion, FrameButtonsType, FrameFlattened } from 'frames.js';
 import type { Metadata } from 'next';
 import { BASE_URL } from '../../../lib/constants';
 import { getProposal } from '../../../lib/the-graph';
@@ -22,21 +22,27 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     };
   }
 
-  const fcMetadata: Record<string, string> = getFrameFlattened({
-    version: 'vNext',
+  const fcMetadata: Record<string, any> = getFrameFlattened({
+    version: "vNext" as FrameVersion,
+    postUrl: `${BASE_URL}/api/proposals/${id}`,
+    image: `${BASE_URL}/api/proposals/${id}/image`,
     buttons: [
       {
-        label: 'approve ✅',
+        label: 'against ❌',
+        action: 'tx', 
+        target: `${BASE_URL}/api/proposals/${id}`
+      },
+      {
+        label: 'for ✅',
+        action: 'tx',
+        target: `${BASE_URL}/api/proposals/${id}`
       },
       {
         label: 'abstain ❔',
-      },
-      {
-        label: 'reject ❌',
+        action: 'tx',
+        target: `${BASE_URL}/api/proposals/${id}`
       },
     ],
-    image: `${BASE_URL}/api/proposals/${id}/image`,
-    postUrl: `${BASE_URL}/api/proposals/${id}`,
   });
 
   return {
@@ -45,8 +51,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       title: `Proposal #${id}`,
       images: [`${BASE_URL}/api/proposals/${id}/image`],
     },
+    description: "Vote",
     other: {
-      ...fcMetadata,
+      ...fcMetadata
     },
     metadataBase: new URL(BASE_URL || ''),
   };
