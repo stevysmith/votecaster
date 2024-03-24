@@ -1,6 +1,10 @@
 import { ApolloClient, DefaultOptions, InMemoryCache, gql } from '@apollo/client';
+import { deepCopy } from 'ethers/lib/utils';
 
-const API_URL = 'https://api.thegraph.com/subgraphs/name/soliditydrone/safe-proposal-frame';
+
+// const API_URL = 'https://api.thegraph.com/subgraphs/name/soliditydrone/safe-proposal-frame';
+
+const API_URL = 'https://api.thegraph.com/subgraphs/name/nounsdao/nouns-subgraph';
 
 const defaultOptions: DefaultOptions = {
   watchQuery: {
@@ -49,11 +53,15 @@ export interface Proposal {
   votes: {
     id: string;
   }[];
-  votesCounter: string;
-  minimumFid: string;
-  acceptedVotes: string;
-  rejectedVotes: string;
-  treshold: string;
+  forVotes: string;
+  againstVotes: string;
+  abstainVotes: string;
+  proposalThreshold: string;
+  title: string;
+}
+
+export interface Delegate {
+  id: string;
 }
 
 export const getProposal = async (proposalId: string): Promise<Proposal | null> => {
@@ -62,18 +70,34 @@ export const getProposal = async (proposalId: string): Promise<Proposal | null> 
     cache: new InMemoryCache(),
     defaultOptions,
   });
+  // const proposalsQuery = `
+  //   {
+  //     proposals(where: {id: ${proposalId.toString()}}) {
+  //       id
+  //       votes {
+  //         id
+  //       }
+  //       votesCounter
+  //       acceptedVotes
+  //       rejectedVotes
+  //       minimumFid
+  //       treshold
+  //     }
+  //   }`;
+
+
   const proposalsQuery = `
     {
-      proposals(where: {id: ${proposalId.toString()}}) {
+      proposals(where: { id:"518"}) {
         id
         votes {
           id
         }
-        votesCounter
-        acceptedVotes
-        rejectedVotes
-        minimumFid
-        treshold
+        forVotes
+        againstVotes
+        abstainVotes
+        proposalThreshold
+        title
       }
     }`;
 
@@ -86,4 +110,30 @@ export const getProposal = async (proposalId: string): Promise<Proposal | null> 
   }
 
   return data.proposals[0];
+};
+
+export const getDelegates = async (): Promise<[Delegate] | null> => {
+  const client = new ApolloClient({
+    uri: API_URL,
+    cache: new InMemoryCache(),
+    defaultOptions,
+  });
+
+  const delegatesQuery = `
+    {
+      delegates(where: {delegatedVotes_gte: 1}){
+        id,
+      }
+    }
+  `;
+
+  const { data } = await client.query({
+    query: gql(delegatesQuery),
+  });
+
+  if (!data.delegates || data.delegates.length === 0) {
+    return null;
+  }
+
+  return data.delegates;
 };

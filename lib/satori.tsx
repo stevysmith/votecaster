@@ -13,7 +13,7 @@ let fontExtraBoldData = fs.readFileSync(fontExtraBoldPath);
 const fontSemiBoldItalicPath = join(process.cwd(), 'Raleway-SemiBoldItalic.ttf');
 let fontSemiBoldItalicData = fs.readFileSync(fontSemiBoldItalicPath);
 
-export const generateInitImageSvg = async (minFid: string, threshold: string): Promise<string> => {
+export const generateInitImageSvg = async (minFid: string, threshold: string, extra: string): Promise<string> => {
   return await satori(
     <div
       style={{
@@ -44,7 +44,7 @@ export const generateInitImageSvg = async (minFid: string, threshold: string): P
             fontFamily: 'Raleway-ExtraBold',
           }}
         >
-          Onchain Safe Proposal #1:
+          Nouns Proposal #{minFid}
         </div>
         <div
           style={{
@@ -58,7 +58,7 @@ export const generateInitImageSvg = async (minFid: string, threshold: string): P
             fontFamily: 'Raleway-SemiBoldItalic',
           }}
         >
-          "Transfer 1 SepoliaETH to limone.eth"
+          {extra}
         </div>
       </div>
       <div
@@ -166,7 +166,7 @@ export const generateResultsImageSvg = async (
             fontFamily: 'Raleway-ExtraBold',
           }}
         >
-          Onchain Safe Proposal #1:
+          Cake 1
         </div>
         <div
           style={{
@@ -180,7 +180,7 @@ export const generateResultsImageSvg = async (
             fontFamily: 'Raleway-SemiBoldItalic',
           }}
         >
-          "Transfer 1 SepoliaETH to limone.eth"
+          Cake 2
         </div>
       </div>
       <div

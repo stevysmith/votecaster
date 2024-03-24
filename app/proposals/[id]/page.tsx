@@ -29,6 +29,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         label: 'approve ✅',
       },
       {
+        label: 'abstain ❔',
+      },
+      {
         label: 'reject ❌',
       },
     ],

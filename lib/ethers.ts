@@ -1,6 +1,6 @@
 import { ethers } from 'ethers';
 import { MODULE_ADDRESS, RPC_URL } from './constants';
-import { SAFE_MODULE_ABI } from './ABI';
+import { ozGovernorABI } from './ABI';
 import { getContractCallArgs } from './onchain-utils';
 
 export const getEthers = () => {
@@ -14,20 +14,29 @@ export const getEthers = () => {
 
 export const sendVoteTransaction = async (messageBytes: string, proposalId: string) => {
   const { signer } = getEthers();
-  const contractInterface = new ethers.utils.Interface(SAFE_MODULE_ABI);
+  const contractInterface = new ethers.utils.Interface(ozGovernorABI);
 
   const args = getContractCallArgs(messageBytes);
 
-  signer.sendTransaction({
-    to: MODULE_ADDRESS,
-    value: 0,
-    gasLimit: 3000000,
-    data: contractInterface.encodeFunctionData('verifyFrameActionBodyMessage', [
-      args[0],
-      args[1],
-      args[2],
-      args[3],
-      proposalId,
-    ]),
-  });
+  console.log(args)
+
+  // castVote (uint256 proposalId, uint8 support)
+
+  // 0 against
+  // 1 for
+  // 2 abstain
+
+  // var nounsGovernor = "0x6f3E6272A167e8AcCb32072d08E0957F9c79223d";
+  // signer.sendTransaction({
+  //   to: nounsGovernor,
+  //   value: 0,
+  //   gasLimit: 3000000,
+  //   data: contractInterface.encodeFunctionData('castVote', [
+  //     proposalId,
+  //     args[0],
+  //     args[1],
+  //     args[2],
+  //     args[3],
+  //   ]),
+  // });
 };

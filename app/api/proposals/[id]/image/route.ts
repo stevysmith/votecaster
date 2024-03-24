@@ -11,9 +11,12 @@ export const GET = async (req: Request, { params }: { params: { id: string } }) 
     return new Response('Proposal not found', { status: 404 });
   }
 
+  console.log(proposal)
+
   const svg = await generateInitImageSvg(
-    proposal.minimumFid.toString(),
-    proposal.treshold.toString(),
+    proposal.id.toString(),
+    proposal.proposalThreshold.toString(),
+    proposal.title.toString(),
   );
 
   // Convert SVG to PNG using Sharp

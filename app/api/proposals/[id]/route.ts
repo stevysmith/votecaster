@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { PROPOSAL_ID } from '../../../../lib/constants';
-import { FrameActionPayload, validateFrameMessage } from 'frames.js';
+import { FrameActionPayload, validateFrameMessage, getAddressForFid } from 'frames.js';
 import { sendVoteTransaction } from '../../../../lib/ethers';
 import {
   alreadyVotedResponse,
@@ -9,7 +9,8 @@ import {
   thresholdReachedResponse,
   tryAgainResponse,
 } from '../../../../lib/frame-responses';
-import { getProposal, hasVoted } from '../../../../lib/the-graph';
+import { getProposal, getDelegates, hasVoted } from '../../../../lib/the-graph';
+import { FidRequest } from '@farcaster/core';
 
 async function getResponse(
   req: NextRequest,
@@ -18,7 +19,11 @@ async function getResponse(
   const body: FrameActionPayload = await req.json();
   const id = params.id;
 
+  console.log('Received message', body);
+
   const { isValid, message } = await validateFrameMessage(body);
+
+  console.log(message)
 
   if (!isValid) {
     console.error('Error: invalid message');
@@ -32,30 +37,35 @@ async function getResponse(
     return new NextResponse(tryAgainResponse(id));
   }
 
-  if (
-    parseInt(proposal.acceptedVotes) >= parseInt(proposal.treshold) ||
-    parseInt(proposal.rejectedVotes) >= parseInt(proposal.treshold)
-  ) {
-    console.error(`Proposal threshold reached`);
-    return new NextResponse(thresholdReachedResponse(id));
-  }
+  // if (
+  //   parseInt(proposal.forVotes) >= parseInt(proposal.proposalThreshold) ||
+  //   parseInt(proposal.againstVotes) >= parseInt(proposal.proposalThreshold)
+  // ) {
+  //   console.error(`Proposal threshold reached`);
+  //   return new NextResponse(thresholdReachedResponse(id));
+  // }
 
+  console.log("TEST")
+  console.log(message)
   const fid = message?.data.fid!;
+  
+  console.log(fid)
+  console.log("WE HERE")
 
-  if (fid > 20000) {
-    console.error('Error: invalid fid', { fid: fid, minFid: proposal?.minimumFid });
-    return new NextResponse(
-      invalidFidResponse(fid.toString(), parseInt(proposal?.minimumFid!), id),
-    );
+  // check user address is part of delegates
+  var address = await getAddressForFid({ fid: fid, hubClient: null, options: { fallbackToCustodyAddress: true }});
+  const delegates = await getDelegates();
+
+  if (delegates !== null) {
+    if (!delegates.find((delegate) => delegate.id === address)) {
+      console.error('Error: invalid fid', { fid: fid, minFid: proposal?.proposalThreshold });
+      return new NextResponse(
+        invalidFidResponse(fid.toString(), parseInt(proposal?.proposalThreshold!), id),
+      );
+    }
   }
 
   try {
-    const didVote = await hasVoted(fid.toString()!, id.toString());
-    if (didVote) {
-      console.log('User already voted', { fid, proposal });
-      return new NextResponse(alreadyVotedResponse(id));
-    }
-
     console.log('Sending vote transaction');
     await sendVoteTransaction(body.trustedData.messageBytes, id);
     console.log('Vote transaction sent');
