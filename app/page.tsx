@@ -15,8 +15,8 @@ export default function Page() {
         gap: '1rem',
       }}
     >
-      <a href="https://builders.garden?utm_source=safe-frame" target="_blank">
-        <img src={`${BASE_URL}/builders-garden-logo.png`} height={32} width={104} />
+      <a href="https://github.com/stevysmith/votecaster" target="_blank">
+        <img src={`${BASE_URL}/votecaster-main.png`} height={32} width={104} />
       </a>
 
       <div
@@ -24,26 +24,26 @@ export default function Page() {
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
-          color: '#10D63F',
+          color: '#c1808e',
           fontSize: '48px',
           textAlign: 'center',
           fontFamily: 'Raleway-ExtraBold',
         }}
       >
-        Safe Proposal Frame
+        Votecaster
       </div>
       <div
         style={{
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
-          color: '#10D63F',
+          color: '#c1808e',
           fontSize: '24px',
           textAlign: 'center',
           fontFamily: 'Raleway-Bold',
         }}
       >
-        Experimenting with the Safe Modules and Proposals inside a Farcaster Frame
+        Voting within Farcaster Frame
       </div>
     </div>
   );

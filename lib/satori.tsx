@@ -31,14 +31,14 @@ export const generateInitImageSvg = async (minFid: string, threshold: string, ex
         gap: '1rem',
       }}
     >
-      <img src={`${BASE_URL}/builders-garden-logo.png`} height={32} width={104} />
+      <img src={`${BASE_URL}/votecaster-main.png`} height={32} width={104} />
       <div style={{ display: 'flex', flexDirection: 'column' }}>
         <div
           style={{
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            color: '#10D63F',
+            color: '#c1808e',
             fontSize: '42px',
             textAlign: 'center',
             fontFamily: 'Raleway-ExtraBold',
@@ -91,17 +91,6 @@ export const generateInitImageSvg = async (minFid: string, threshold: string, ex
         >
           Requirement FID &lt; {minFid}
         </div>
-        <div
-          style={{
-            display: 'flex',
-            fontSize: '12px',
-            color: '#FCA453',
-            fontFamily: 'Raleway-Bold',
-            marginTop: '8px'
-          }}
-        >
-          *it can take a while
-        </div>
       </div>
     </div>,
     {
@@ -153,20 +142,20 @@ export const generateResultsImageSvg = async (
         gap: '1rem',
       }}
     >
-      <img src={`${BASE_URL}/builders-garden-logo.png`} height={32} width={104} />
+      <img src={`${BASE_URL}/votecaster-main.png`} height={32} width={104} />
       <div style={{ display: 'flex', flexDirection: 'column' }}>
         <div
           style={{
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            color: '#10D63F',
+            color: '#c1808e',
             fontSize: '42px',
             textAlign: 'center',
             fontFamily: 'Raleway-ExtraBold',
           }}
         >
-          Cake 1
+          {acceptVotes }
         </div>
         <div
           style={{
@@ -180,7 +169,7 @@ export const generateResultsImageSvg = async (
             fontFamily: 'Raleway-SemiBoldItalic',
           }}
         >
-          Cake 2
+          {rejectVotes}
         </div>
       </div>
       <div
@@ -251,13 +240,13 @@ export const generateInvalidFidImageSvg = async (fid: string, minFid: string): P
         gap: '1rem',
       }}
     >
-      <img src={`${BASE_URL}/builders-garden-logo.png`} height={32} width={104} />
+      <img src={`${BASE_URL}/votecaster-main.png`} height={32} width={104} />
       <div
         style={{
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
-          color: '#10D63F',
+          color: '#c1808e',
           fontSize: '48px',
           textAlign: 'center',
           fontFamily: 'Raleway-ExtraBold',
@@ -270,7 +259,7 @@ export const generateInvalidFidImageSvg = async (fid: string, minFid: string): P
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
-          color: '#10D63F',
+          color: '#c1808e',
           marginTop: '2rem',
           fontSize: '24px',
           textAlign: 'center',

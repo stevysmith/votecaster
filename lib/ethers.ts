@@ -27,8 +27,6 @@ export async function castVoteOnProposal(
     args: [proposalId, selectedVote],
   });
 
-  console.log(calldata)
-
   return NextResponse.json({
     chainId: "eip155:1",
     method: "eth_sendTransaction",

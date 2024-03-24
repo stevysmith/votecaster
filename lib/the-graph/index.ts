@@ -1,9 +1,6 @@
 import { ApolloClient, DefaultOptions, InMemoryCache, gql } from '@apollo/client';
 import { deepCopy } from 'ethers/lib/utils';
 
-
-// const API_URL = 'https://api.thegraph.com/subgraphs/name/soliditydrone/safe-proposal-frame';
-
 const API_URL = 'https://api.thegraph.com/subgraphs/name/nounsdao/nouns-subgraph';
 
 const defaultOptions: DefaultOptions = {

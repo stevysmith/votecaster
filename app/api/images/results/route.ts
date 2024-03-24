@@ -12,9 +12,9 @@ export const GET = async (req: Request, res: Response) => {
   }
 
   const svg = await generateResultsImageSvg(
-    parseInt(proposal.acceptedVotes),
-    parseInt(proposal.rejectedVotes),
-    parseInt(proposal.treshold),
+    parseInt(proposal.forVotes),
+    parseInt(proposal.againstVotes),
+    parseInt(proposal.proposalThreshold),
   );
 
   // Convert SVG to PNG using Sharp

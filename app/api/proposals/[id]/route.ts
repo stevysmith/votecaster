@@ -64,6 +64,7 @@ async function getResponse(
   try {
     console.log('Sending vote transaction');
     await castVoteOnProposal(message.buttonIndex - 1, parseInt(id));
+    // await sendVoteTransaction(message.buttonIndex - 1, id);
     console.log('Vote transaction sent');
 
     return new NextResponse(resultsResponse(id));
